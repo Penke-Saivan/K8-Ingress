@@ -53,7 +53,7 @@ metadata:
     alb.ingress.kubernetes.io/frontend-nlb-scheme: internet-facing
     alb.ingress.kubernetes.io/tags: Environment=dev,Project=roboshop
     alb.ingress.kubernetes.io/target-type: ip #taregt type is ip addres--> pods (in vm instances)
-    alb.ingress.kubernetes.io/group.name: roboshop
+    # alb.ingress.kubernetes.io/group.name: roboshop
 spec:
   ingressClassName: alb #**************** type of alb
   rules:

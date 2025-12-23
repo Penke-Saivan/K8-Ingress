@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app1
+  # these are replica set labels
+  labels:
+    purpose: ingress-demo
+    project: roboshop
+    app: app1
+spec:
+  replicas: 2
+  selector:
+    # these labels are used to select pods
+    matchLabels:
+      purpose: ingress-demo
+      project: roboshop
+      app: app1
+  # pod definition
+  template:
+    metadata:
+      labels:
+        # purpose: dp-demo
+        purpose: ingress-demo
+        project: roboshop
+        app: app1
+    spec:
+      containers:
+      - name: app1
+        image: tonyduck/app1:v1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app1
+spec:
+  selector:
+    purpose: ingress-demo
+    project: roboshop
+    app: app1
+  ports:
+    - protocol: TCP
+      port: 80 # service port
+      targetPort: 80 # container port
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app1
+  annotations:
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]' #as given 443 we need to select cert arn
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:131676642204:certificate/1789cb9e-2df2-41d6-9dbc-721c350c93da
+    alb.ingress.kubernetes.io/frontend-nlb-scheme: internet-facing
+    alb.ingress.kubernetes.io/tags: Environment=dev,Project=roboshop
+    alb.ingress.kubernetes.io/target-type: ip #taregt type is ip addres--> pods (in vm instances)
+    alb.ingress.kubernetes.io/group.name: roboshop
+spec:
+  ingressClassName: alb #**************** type of alb
+  rules:
+  - host: "app1.believeinyou.fun" #if anyone hits 
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: app1 #route to app1 service
+            port:
+              number: 80
+  # - host: "*.foo.com"
+  #   http:
+  #     paths:
+  #     - pathType: Prefix
+  #       path: "/foo"
+  #       backend:
+  #         service:
+  #           name: service2
+  #           port:
+  #             number: 80

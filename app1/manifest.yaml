@@ -49,8 +49,8 @@ metadata:
   name: app1
   annotations:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]' #as given 443 we need to select cert arn
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:131676642204:certificate/1789cb9e-2df2-41d6-9dbc-721c350c93da
-    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:131676642204:certificate/3be098df-0deb-427b-85ec-8d9243dfabe1
+    alb.ingress.kubernetes.io/scheme: internet-facing #imp
     alb.ingress.kubernetes.io/tags: Environment=dev,Project=roboshop
     alb.ingress.kubernetes.io/target-type: ip #taregt type is ip addres--> pods (in vm instances)
     # alb.ingress.kubernetes.io/group.name: roboshop
